@@ -25,7 +25,7 @@ Due to vague requirements, the following assumptions were made:
 - **Data Structure**:
   - `device`: Unique string identifier.
   - `timestamp`: Unix epoch (seconds).
-  - Vital signs (e.g., `heartRateValue`): numeric fields.
+  - Vital signs (`heartRateValue`): numeric fields.
 - **Primary Read Pattern**: Fetch latest data per device — read-optimized schema.
 
 ---
@@ -114,7 +114,7 @@ A JSON object matching the `VitalData` schema:
 
 - `device` (string, required)
 - `timestamp` (number, required)
-- Other vital signs (e.g., `heartRateValue`) are optional numbers.
+- Other vital signs (`heartRateValue`) are optional numbers.
 
 ### Success Response
 - `202 Accepted`
@@ -179,9 +179,9 @@ No. For high-frequency telemetry, HTTP/1.1 is inefficient.
 **Devices → MQTT Broker → Kafka → Stream Processor → Databases**
 
 ### Components
-- **MQTT Broker** (e.g., EMQX, HiveMQ): Devices connect to an MQTT broker, which can handle millions of persistent connections efficiently.
+- **MQTT Broker** (EMQX, HiveMQ): Devices connect to an MQTT broker, which can handle millions of persistent connections efficiently.
 - **Apache Kafka**: The MQTT broker forwards all messages to a Kafka topic. Kafka provides a highly durable, scalable, and persistent log of all incoming events, acting as a central buffer for the entire system.
-- **Stream Processor** (e.g., Flink, ksqlDB):  A stream processing engine consumes data from Kafka in real-time. It can perform transformations, aggregations (e.g., calculating 5-minute average heart rate), and route data to different destinations.
+- **Stream Processor** (Flink, ksqlDB):  A stream processing engine consumes data from Kafka in real-time. It can perform transformations, aggregations (like calculating a 5-minute average heart rate), and route data to different destinations.
 - **Databases**:
   - The processor can write the raw event data to a data lake (like S3) for analytics, and simultaneously update a high-performance database (like PostgreSQL or a time-series DB like InfluxDB) to serve real-time queries
 
