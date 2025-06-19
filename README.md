@@ -104,7 +104,7 @@ curl -X POST -H "Content-Type: application/json" \
 curl "http://localhost:3000/vital-data?count=5&sortBy=timestamp&orderBy=desc"
 ```
 
-### API Endpoints
+## API Endpoints
 
 ## POST `/vital-data`
 Accepts a JSON payload for a single device measurement.
@@ -140,7 +140,7 @@ Retrieves a paginated and sorted list of the latest data for all devices.
 
 ---
 
-# Limitations and Trade-offs
+## Limitations and Trade-offs
 
 - **In-Memory Queue**: Simple array; data is lost on crash.  
   *Improvement*: Use Redis or RabbitMQ.
@@ -156,7 +156,7 @@ Retrieves a paginated and sorted list of the latest data for all devices.
 
 ---
 
-# Architectural Critique & Future Considerations
+## Architectural Critique & Future Considerations
 
 ## Is HTTP the right protocol?
 No. For high-frequency telemetry, HTTP/1.1 is inefficient.
