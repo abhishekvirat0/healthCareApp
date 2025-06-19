@@ -158,32 +158,31 @@ Retrieves a paginated and sorted list of the latest data for all devices.
 
 ## Architectural Critique & Future Considerations
 
-## Is HTTP the right protocol?
+### Is HTTP the right protocol?
 No. For high-frequency telemetry, HTTP/1.1 is inefficient.
 
 ### Better Protocols
-- **MQTT**: Lightweight, persistent connection, ideal for IoT.
-- **gRPC**: Efficient binary protocol over HTTP/2.
+- **MQTT**: A lightweight, publish/subscribe protocol that maintains a persistent connection, drastically reducing overhead.
+- **gRPC**: Uses HTTP/2 for multiplexing and Protocol Buffers for efficient binary serialization, making it much faster and less bandwidth-intensive than REST over HTTP/1.1.
 
 ---
 
-# Alternative Architectures
+## Alternative Architectures
 
 **Devices → MQTT Broker → Kafka → Stream Processor → Databases**
 
 ### Components
-- **MQTT Broker** (e.g., EMQX, HiveMQ): Handles millions of device connections.
-- **Apache Kafka**: Central log of events, scalable and durable.
-- **Stream Processor** (e.g., Flink, ksqlDB): Real-time processing and routing.
+- **MQTT Broker** (e.g., EMQX, HiveMQ): Devices connect to an MQTT broker, which can handle millions of persistent connections efficiently.
+- **Apache Kafka**: The MQTT broker forwards all messages to a Kafka topic. Kafka provides a highly durable, scalable, and persistent log of all incoming events, acting as a central buffer for the entire system.
+- **Stream Processor** (e.g., Flink, ksqlDB):  A stream processing engine consumes data from Kafka in real-time. It can perform transformations, aggregations (e.g., calculating 5-minute average heart rate), and route data to different destinations.
 - **Databases**:
-  - Data lake (e.g., S3) for analytics.
-  - PostgreSQL or time-series DB (e.g., InfluxDB) for real-time queries.
+  - The processor can write the raw event data to a data lake (like S3) for analytics, and simultaneously update a high-performance database (like PostgreSQL or a time-series DB like InfluxDB) to serve real-time queries
 
 ---
 
 # Potential System Improvements
 
-- **Dedicated Cache**: Use Redis to cache popular GET queries.
-- **Horizontal Scaling**: Backend is stateless and can scale behind a load balancer.
-- **Database Scaling**: Use PostgreSQL read replicas for high read throughput.
+- **Dedicated Cache**: Introduce a Redis cache in front of the read endpoint (GET /vital-data) to serve popular queries with sub-millisecond latency.
+- **Horizontal Scaling**: The backend service is stateless and can be scaled horizontally by running multiple instances behind a load balancer.
+- **Database Scaling**: For read-heavy workloads, PostgreSQL can be scaled by introducing one or more read replicas.
 
