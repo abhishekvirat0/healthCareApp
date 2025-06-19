@@ -138,8 +138,13 @@ Retrieves a paginated and sorted list of the latest data for all devices.
 ### Success Response
 - `200 OK` with a JSON body containing `total` and `resources` fields.
 
-![](Images/1.png)
-![](Images/2.png)
+### Screenshots for reference
+<div align="center">
+  <img src="Images/1.png" alt="img-1" width="152" height="150"/>
+  <img src="Images/2.png" alt="img-1" width="152" height="150"/>
+  <img src="Images/3.png" alt="img-1" width="152" height="150"/>
+</div>
+
 ---
 
 ## Limitations and Trade-offs
